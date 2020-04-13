@@ -36,9 +36,10 @@ The code is divided into the following folders:
 
 ## Service endpoints
 
-The server runs in port `7091`, which is the default port used by Loxone Music
-Server. The server contains a variety of endpoints (and a WebSocket) used by
-the Loxone Miniserver and the UI to communicate with it. Other endpoints worth
+The server runs in port `6090`, and each Music Server created will run on a
+consecutive port. This means that your first Music Server will run in port
+`6091`. The server contains a variety of endpoints (and a WebSocket) used by the
+Loxone Miniserver and the UI to communicate with it. Other endpoints worth
 noting are:
 
 - `/restart`: useful for restarting the service. Accepts a `code` parameter
@@ -48,3 +49,57 @@ noting are:
   - `254`: immediately restart the service.
 
   Any other code will restart the service after 5 seconds.
+
+## Communication
+
+Music Servers expect to get and receive data via UDP, through the same address
+specified for TCP and Loxone Miniserver communication (i.e. in the case of the
+first Music Server, that will be `6091`). This data is key to get actions
+executed in the interface and to push data back to it.
+
+### Data sent to Loxone Miniserver
+
+All data is sent in the form of `<ID>::<COMMAND>::<ARGS>` (where `<ARGS>`
+are also `::` separated). `<ID>` references the player executing the action,
+`<COMMAND>` references the action performend, and `<ARGS>` will contain
+attributes related to the command (if any). The following commands are
+supported:
+
+- `play`: Music started playing. It is also sent when resuming the play.
+
+- `pause`: Music was paused.
+
+- `volume::<VOLUME>`: the volume was modified to the new value provided. Values
+  go from `0` (muted) to `100` (highest possible volume).
+
+- `queueIndex::<QUEUE_INDEX>`: the index of the queue (e.g. playlist) was
+  modified. Indices are 0-based, meaning the first song has an index of `0`.
+
+- `time::<TIME>`: used when seeking, to indicate the new time from which we
+  want to play.
+
+### Data expected to be received by the Music Server
+
+- `setTitle::<TITLE>`: sets the title of the song being played. This is used in
+  multiple places of the UI.
+
+- `setAlbum::<ALBUM>`: sets the album name.
+
+- `setArtist::<ARTIST>`: sets the artist(s) name(s).
+
+- `setCover::<COVER>`: sets the URL of the cover to be shown. Any HTTP or HTTPS
+  URL is valid. This is not required, but covers are shown in multiple places
+  of the UI.
+
+- `setTime::<TIME>`: used to set internally the current time. This is not
+  required, but it helps to keep the time shown in the UI accurately synced
+  with the internal player time.
+
+## Prior art
+
+This plugin is based on the following elements:
+
+- [An image posted in Loxforum](https://www.loxforum.com/forum/german/software-konfiguration-programm-und-visualisierung/23597-musikserver-protokoll?p=41938#post41938)
+- [Loxone Music Server update](http://mediaupdate.loxone.com/updates/update022.tgz)
+  (manually read the `/bin/lws` binary as a text file)
+- Loxone Web Interface
