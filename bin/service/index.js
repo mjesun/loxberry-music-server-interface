@@ -1,8 +1,12 @@
 'use strict';
 
 const http = require('http');
+const path = require('path');
 const querystring = require('querystring');
 
+const MusicServer = require('./music-server');
+
+const cfg = require('./cfg');
 const restart = require('./handlers/restart');
 
 const headers = {
@@ -14,7 +18,8 @@ Error.stackTraceLimit = Infinity;
 http
   .createServer(async (req, res) => {
     try {
-      const url = req.url.substr(0, req.url.indexOf('?'));
+      const index = req.url.indexOf('?');
+      const url = index === -1 ? req.url : req.url.substr(0, index);
       const query = querystring.parse(req.url.substr(url.length + 1));
 
       switch (true) {
@@ -33,4 +38,15 @@ http
       res.end(err.stack);
     }
   })
-  .listen(7091);
+  .listen(6090);
+
+const config = cfg.read(path.join('REPLACELBPCONFIGDIR', 'data.cfg'));
+
+for (let id = 0; id < +config.data['music-servers']; id++) {
+  const server = new MusicServer({
+    zones: +config.data['music-server-' + id + '-zones'],
+    port: 6091 + id,
+  });
+
+  server.start();
+}

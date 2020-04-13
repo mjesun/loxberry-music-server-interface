@@ -5,7 +5,7 @@
   "main": "bin/service/index.js",
   "scripts": {
     "prettier": "prettier --write '**/*.{js,md}'",
-    "zip": "zip -r -9 master bin config daemon icons uninstall webfrontend plugin.cfg preupgrade.sh"
+    "zip": "zip -r -9 master bin config daemon icons uninstall webfrontend plugin.cfg preupgrade.sh postinstall.sh"
   },
   "author": "Miguel Jimenez <mjesun@hotmail.com>",
   "license": "MIT",
