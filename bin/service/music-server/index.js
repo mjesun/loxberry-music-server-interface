@@ -84,7 +84,7 @@ module.exports = class MusicServer {
     dgramServer.bind(this._config.port);
     httpServer.listen(this._config.port);
 
-    setTimeout(this._sendAudioEvents.bind(this, this._zones), 2000);
+    setInterval(this._sendAudioEvents.bind(this, this._zones), 4000);
 
     this._dgramServer = dgramServer;
     this._httpServer = httpServer;
