@@ -40,12 +40,18 @@ http
   })
   .listen(6090);
 
-const config = cfg.read(path.join('REPLACELBPCONFIGDIR', 'data.cfg'));
+let config = null;
 
-for (let id = 0; id < +config.data['music-servers']; id++) {
+try {
+  config = cfg.read(path.join('REPLACELBPCONFIGDIR', 'data.cfg'));
+} catch (err) {
+  config = {data: {'music-servers': 1, 'music-server-1-zones': 4}};
+}
+
+for (let id = 1; id <= +config.data['music-servers']; id++) {
   const server = new MusicServer({
     zones: +config.data['music-server-' + id + '-zones'],
-    port: 6091 + id,
+    port: 6090 + id,
   });
 
   server.start();
