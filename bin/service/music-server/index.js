@@ -170,7 +170,7 @@ module.exports = class MusicServer {
       case /(?:^|\/)audio\/\d+\/queueplus(?:\/|$)/.test(url):
         return this._audioQueuePlus(url);
 
-      case /(?:^|\/)audio\/\d+\/volume\/[+-]\d+(?:\/|$)/.test(url):
+      case /(?:^|\/)audio\/\d+\/volume\/[+-]?\d+(?:\/|$)/.test(url):
         return this._audioVolume(url);
 
       default:
@@ -197,15 +197,15 @@ module.exports = class MusicServer {
         upnplicences: 0,
         usetrigger: false,
         players: this._zones.map((zone, i) => ({
-            playerid: i + 1,
-            clienttype: 0,
-            default_volume: zone.getVolume(),
-            enabled: true,
-            internalname: 'zone-' + (i + 1),
-            max_volume: 100,
-            name: 'Zone ' + (i + 1),
-            upnpmode: 0,
-            upnppredelay: 0,
+          playerid: i + 1,
+          clienttype: 0,
+          default_volume: zone.getVolume(),
+          enabled: true,
+          internalname: 'zone-' + (i + 1),
+          max_volume: 100,
+          name: 'Zone ' + (i + 1),
+          upnpmode: 0,
+          upnppredelay: 0,
         })),
       },
     ]);
@@ -309,7 +309,11 @@ module.exports = class MusicServer {
     const [, zoneId, , volume] = url.split('/');
     const zone = this._zones[+zoneId - 1];
 
-    zone.setVolume(zone.getVolume() + +volume);
+    if (/^[+-]/.test(volume)) {
+      zone.setVolume(zone.getVolume() + +volume);
+    } else {
+      zone.setVolume(+volume);
+    }
 
     return this._audioCfgGetPlayersDetails('audio/cfg/getplayersdetails');
   }
