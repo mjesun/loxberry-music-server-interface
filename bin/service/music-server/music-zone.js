@@ -10,6 +10,7 @@ module.exports = class MusicZone {
     this._duration = 0;
     this._mode = 'stop';
     this._queueIndex = 0;
+    this._shuffle = false;
     this._time = 0;
     this._title = '';
     this._volume = 50;
@@ -27,6 +28,7 @@ module.exports = class MusicZone {
       coverurl: this.getCover(),
       duration: this.getDuration(),
       mode: this.getMode(),
+      plshuffle: this.getShuffle(),
       power: 'on',
       station: '',
       time: this.getTime(),
@@ -116,6 +118,17 @@ module.exports = class MusicZone {
 
     this._sendPlayerCommand('queueIndex', this._queueIndex);
     this._sendAudioEvent();
+  }
+
+  setShuffle(shuffle) {
+    this._shuffle = !!shuffle;
+
+    this._sendPlayerCommand('shuffle', this._shuffle ? 1 : 0);
+    this._sendAudioEvent();
+  }
+
+  getShuffle() {
+    return this._shuffle;
   }
 
   getTitle() {
