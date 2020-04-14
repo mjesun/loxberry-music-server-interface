@@ -91,6 +91,9 @@ supported:
   URL is valid. This is not required, but covers are shown in multiple places
   of the UI.
 
+- `setDuration::<DURATION>`: sets the duration, in seconds, of the current song
+  being played.
+
 - `setTime::<TIME>`: used to set internally the current time. This is not
   required, but it helps to keep the time shown in the UI accurately synced
   with the internal player time.
