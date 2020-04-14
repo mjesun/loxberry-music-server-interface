@@ -14,6 +14,7 @@ module.exports = class MusicZone {
     this._title = '';
     this._volume = 50;
 
+    this._audioEventSent = false;
     this._playStart = 0;
   }
 
@@ -40,6 +41,7 @@ module.exports = class MusicZone {
 
   setAlbum(album) {
     this._album = ('' + album).trim();
+    this._sendAudioEvent();
   }
 
   getArtist() {
@@ -48,6 +50,7 @@ module.exports = class MusicZone {
 
   setArtist(artist) {
     this._artist = ('' + artist).trim();
+    this._sendAudioEvent();
   }
 
   getCover() {
@@ -56,6 +59,7 @@ module.exports = class MusicZone {
 
   setCover(cover) {
     this._cover = ('' + cover).trim();
+    this._sendAudioEvent();
   }
 
   getDuration() {
@@ -64,6 +68,7 @@ module.exports = class MusicZone {
 
   setDuration(duration) {
     this._duration = +duration;
+    this._sendAudioEvent();
   }
 
   getMode() {
@@ -81,7 +86,9 @@ module.exports = class MusicZone {
       }
 
       this._mode = mode;
-      this._send(mode);
+
+      this._sendPlayerCommand(mode);
+      this._sendAudioEvent();
     }
   }
 
@@ -94,7 +101,8 @@ module.exports = class MusicZone {
 
     // Position differs from time in the sense that time will not emit an event
     // to the Miniserver, thus avoiding an infinite loop.
-    this._send('time', this.getTime());
+    this._sendPlayerCommand('time', this.getTime());
+    this._sendAudioEvent();
   }
 
   getQueueIndex() {
@@ -105,7 +113,9 @@ module.exports = class MusicZone {
     this.setPosition(0);
 
     this._queueIndex = Math.max(0, queueIndex);
-    this._send('queueIndex', this._queueIndex);
+
+    this._sendPlayerCommand('queueIndex', this._queueIndex);
+    this._sendAudioEvent();
   }
 
   getTitle() {
@@ -133,11 +143,23 @@ module.exports = class MusicZone {
 
   setVolume(volume) {
     this._volume = Math.min(Math.max(+volume, 0), 100);
-    this._send('volume', this._volume);
+
+    this._sendPlayerCommand('volume', this._volume);
+    this._sendAudioEvent();
   }
 
-  _send(command, ...args) {
+  _sendPlayerCommand(command, ...args) {
     this._musicServer.pushPlayerState(this._id, command, args);
-    this._musicServer.pushAudioEvent(this._id);
+  }
+
+  _sendAudioEvent() {
+    if (!this._audioEventSent) {
+      this._audioEventSent = true;
+
+      setTimeout(() => {
+        this._audioEventSent = false;
+        this._musicServer.pushAudioEvent(this._id);
+      }, 25);
+    }
   }
 };
