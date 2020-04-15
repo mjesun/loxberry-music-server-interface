@@ -179,6 +179,9 @@ module.exports = class MusicServer {
       case /(?:^|\/)audio\/\d+\/queueplus(?:\/|$)/.test(url):
         return this._audioQueuePlus(url);
 
+      case /(?:^|\/)audio\/\d+\/repeat\/\d+(?:\/|$)/.test(url):
+        return this._audioRepeat(url);
+
       case /(?:^|\/)audio\/\d+\/shuffle\/\d+(?:\/|$)/.test(url):
         return this._audioShuffle(url);
 
@@ -313,11 +316,21 @@ module.exports = class MusicServer {
     return this._audioCfgGetPlayersDetails('audio/cfg/getplayersdetails');
   }
 
+  _audioRepeat(url) {
+    const [, zoneId, , repeatMode] = url.split('/');
+    const zone = this._zones[+zoneId - 1];
+    const repeatModes = {0: 0, 1: 2, 3: 1};
+
+    zone.setRepeat(repeatModes[repeatMode]);
+
+    return this._audioCfgGetPlayersDetails('audio/cfg/getplayersdetails');
+  }
+
   _audioShuffle(url) {
     const [, zoneId, , shuffle] = url.split('/');
     const zone = this._zones[+zoneId - 1];
 
-    zone.setShuffle(!!+shuffle);
+    zone.setShuffle(+shuffle);
 
     return this._audioCfgGetPlayersDetails('audio/cfg/getplayersdetails');
   }
