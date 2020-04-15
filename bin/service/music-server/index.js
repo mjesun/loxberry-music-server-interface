@@ -135,7 +135,10 @@ module.exports = class MusicServer {
         return this._audioCfgEqualizer(url);
 
       case /(?:^|\/)audio\/cfg\/getfavorites\//.test(url):
-        return this._audioCfgGetFavorites(url);
+        return this._emptyCommand(url, []);
+
+      case /(?:^|\/)audio\/cfg\/getinputs(?:\/|$)/.test(url):
+        return this._emptyCommand(url, []);
 
       case /(?:^|\/)audio\/cfg\/get(?:paired)?master(?:\/|$)/.test(url):
         return this._audioCfgGetMaster(url);
@@ -143,8 +146,14 @@ module.exports = class MusicServer {
       case /(?:^|\/)audio\/cfg\/getplayersdetails(?:\/|$)/.test(url):
         return this._audioCfgGetPlayersDetails(url);
 
+      case /(?:^|\/)audio\/cfg\/getradios(?:\/|$)/.test(url):
+        return this._emptyCommand(url, []);
+
       case /(?:^|\/)audio\/cfg\/getroomfavs\//.test(url):
         return this._audioCfgGetRoomFavs(url);
+
+      case /(?:^|\/)audio\/cfg\/getservices(?:\/|$)/.test(url):
+        return this._emptyCommand(url, []);
 
       case /(?:^|\/)audio\/cfg\/getsyncedplayers(?:\/|$)/.test(url):
         return this._audioCfgGetSyncedPlayers(url);
@@ -223,10 +232,6 @@ module.exports = class MusicServer {
         equalizer: 'default',
       },
     ]);
-  }
-
-  _audioCfgGetFavorites(url) {
-    return this._response(url, 'getroomfavs', []);
   }
 
   _audioCfgGetMaster(url) {
@@ -331,7 +336,13 @@ module.exports = class MusicServer {
   }
 
   _emptyCommand(url, response) {
-    return this._response(url, url.split('/').pop(), response);
+    const parts = url.split('/');
+
+    for (let i = parts.length; i--; ) {
+      if (/^[a-z]/.test(parts[i])) {
+        return this._response(url, parts[i], response);
+      }
+    }
   }
 
   _unknownCommand(url) {
