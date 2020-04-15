@@ -65,9 +65,9 @@ are also `::` separated). `<ID>` references the player executing the action,
 attributes related to the command (if any). The following commands are
 supported:
 
-- `play`: Music started playing. It is also sent when resuming the play.
+- `play`: music started playing. It is also sent when resuming the play.
 
-- `pause`: Music was paused.
+- `pause`: music was paused.
 
 - `volume::<VOLUME>`: the volume was modified to the new value provided. Values
   go from `0` (muted) to `100` (highest possible volume).
@@ -77,6 +77,13 @@ supported:
 
 - `time::<TIME>`: used when seeking, to indicate the new time from which we
   want to play.
+
+- `shuffle::<TYPE>`: user selected to shuffle the playlist. A `<TYPE>` of `0`
+  represents a normal reproduction, while `1` represents being shuffled.
+
+- `repeat::<TYPE>`: user chose a repeating mode. A `<TYPE>` of `0` indicates no
+  repetition, a `<TYPE>` of `1` indicates single repetition (the same track
+  over and over), and a type of `2` indicates full playlist repetition.
 
 ### Data expected to be received by the Music Server
 
