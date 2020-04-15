@@ -266,9 +266,11 @@ module.exports = class MusicServer {
   }
 
   _audioCfgMac(url) {
-    return this._response(url, 'mac', {
-      macaddress: this._mac(),
-    });
+    return this._response(url, 'mac', [
+      {
+        macaddress: this._mac(),
+      },
+    ]);
   }
 
   _audioPause(url) {
