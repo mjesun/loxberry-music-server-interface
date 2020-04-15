@@ -10,7 +10,8 @@ module.exports = class MusicZone {
     this._duration = 0;
     this._mode = 'stop';
     this._queueIndex = 0;
-    this._shuffle = false;
+    this._repeat = 0;
+    this._shuffle = 0;
     this._time = 0;
     this._title = '';
     this._volume = 50;
@@ -20,6 +21,8 @@ module.exports = class MusicZone {
   }
 
   audioState() {
+    const repeatModes = {0: 0, 2: 1, 1: 3};
+
     return {
       playerid: this._id,
       album: this.getAlbum(),
@@ -28,7 +31,8 @@ module.exports = class MusicZone {
       coverurl: this.getCover(),
       duration: this.getDuration(),
       mode: this.getMode(),
-      plshuffle: +this.getShuffle(),
+      plrepeat: repeatModes[this.getRepeat()],
+      plshuffle: this.getShuffle(),
       power: 'on',
       station: '',
       time: this.getTime(),
@@ -120,15 +124,30 @@ module.exports = class MusicZone {
     this._sendAudioEvent();
   }
 
-  setShuffle(shuffle) {
-    this._shuffle = !!shuffle;
+  getRepeat() {
+    return this._repeat;
+  }
 
-    this._sendPlayerCommand('shuffle', this._shuffle ? 1 : 0);
-    this._sendAudioEvent();
+  setRepeat(repeat) {
+    if (repeat === 0 || repeat === 1 || repeat === 2) {
+      this._repeat = repeat;
+
+      this._sendPlayerCommand('repeat', repeat);
+      this._sendAudioEvent();
+    }
   }
 
   getShuffle() {
     return this._shuffle;
+  }
+
+  setShuffle(shuffle) {
+    if (shuffle === 0 || shuffle === 1) {
+      this._shuffle = shuffle;
+
+      this._sendPlayerCommand('shuffle', shuffle);
+      this._sendAudioEvent();
+    }
   }
 
   getTitle() {
