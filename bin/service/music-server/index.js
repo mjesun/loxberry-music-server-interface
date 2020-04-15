@@ -98,6 +98,8 @@ module.exports = class MusicServer {
       const message = [].concat(id, command, args).join('::');
       const client = dgram.createSocket('udp4');
 
+      console.log('[UDP4] Pushing ' + message);
+
       client.send(message, this._config.port, miniserverIp, () => {
         client.close();
       });
