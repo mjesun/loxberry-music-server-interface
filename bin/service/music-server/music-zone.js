@@ -28,7 +28,7 @@ module.exports = class MusicZone {
       coverurl: this.getCover(),
       duration: this.getDuration(),
       mode: this.getMode(),
-      plshuffle: this.getShuffle(),
+      plshuffle: +this.getShuffle(),
       power: 'on',
       station: '',
       time: this.getTime(),
