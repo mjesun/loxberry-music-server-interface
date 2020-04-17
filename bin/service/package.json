@@ -1,6 +1,6 @@
 {
   "name": "service",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "Internal service for Loxberry Music Server Interface",
   "author": "Miguel Jimenez <mjesun@hotmail.com>",
   "license": "MIT",

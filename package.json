@@ -1,6 +1,6 @@
 {
   "name": "loxberry-music-server-interface",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "LoxBerry plugin for emulating music servers",
   "main": "bin/service/index.js",
   "scripts": {
