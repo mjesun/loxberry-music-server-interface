@@ -10,7 +10,17 @@
 
   if (count(array_keys($_POST)) > 0) {
     for ($id = 1; $id <= $_POST["music-servers"]; $id++) {
-      $_POST["music-server-$id-zones"] = intval($_POST["music-server-$id-zones"]) ?? 1;
+      $_POST["music-server-$id-zones"] = array_key_exists("music-server-$id-zones", $_POST)
+        ? intval($_POST["music-server-$id-zones"])
+        : 4;
+
+      $_POST["music-server-$id-miniserver"] = array_key_exists("music-server-$id-miniserver", $_POST)
+        ? intval($_POST["music-server-$id-miniserver"])
+        : 1;
+
+      $_POST["music-server-$id-receivers"] = array_key_exists("music-server-$id-receivers", $_POST)
+        ? $_POST["music-server-$id-receivers"]
+        : '';
     }
 
     foreach ($_POST as $key => $value) {
@@ -69,17 +79,15 @@
 
 <form method="POST">
   <div class="key-value">
-    <?php foreach ($cfg["data"] as $key => $value) { ?>
-      <dl>
-        <dt>
-          <?= ucfirst(preg_replace('/[-_]/', ' ', $key)) ?>:
-        </dt>
+    <dl>
+      <dt>
+        Music servers:
+      </dt>
 
-        <dd>
-          <input type="text" name="<?= $key ?>" value="<?= $value ?>" />
-        </dd>
-      </dl>
-    <?php } ?>
+      <dd>
+        <input type="text" name="music-servers" value="<?= $cfg["data"]["music-servers"] ?>" />
+      </dd>
+    </dl>
   </div>
 
   <?php for ($id = 1; $id <= $cfg["data"]["music-servers"]; $id++) { ?>
@@ -114,7 +122,40 @@
     <div class="box">
       <p>
         Music Server <?= $id ?> is located in port <?= 6090 + $id ?>:
+      </p>
 
+      <dl>
+        <dt>
+          Zones:
+        </dt>
+
+        <dd>
+	  <input type="text" name="music-server-<?= $id ?>-zones" value="<?= $cfg["data"]["music-server-$id-zones"] ?>" />
+        <dd>
+      </dl>
+
+      <dl>
+        <dt>
+          Send to miniserver as virtual inputs/outputs:
+        </dt>
+
+        <dd>
+          <input type="hidden" name="music-server-<?= $id ?>-miniserver" value="0" />
+          <input type="checkbox" name="music-server-<?= $id ?>-miniserver" value="1" <?= $cfg["data"]["music-server-$id-miniserver"] ? 'checked' : '' ?> />
+        <dd>
+      </dl>
+
+      <dl>
+        <dt>
+          IPs to send messages (comma separated list):
+        </dt>
+
+        <dd>
+          <input type="text" name="music-server-<?= $id ?>-receivers" value="<?= $cfg["data"]["music-server-$id-receivers"] ?>" />
+        <dd>
+      </dl>
+
+      <p>
         <a
           class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-arrow-d ui-btn-icon-left"
           href="data:application/octet-stream;charset=utf-8;base64,<?= base64_encode($vi) ?>"
