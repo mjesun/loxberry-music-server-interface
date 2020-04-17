@@ -92,18 +92,21 @@ module.exports = class MusicServer {
   }
 
   pushPlayerState(id, command, args) {
-    const miniserverIp = this._miniserverIp;
+    const message = [].concat(id, command, args).join('::');
 
-    if (miniserverIp) {
-      const message = [].concat(id, command, args).join('::');
+    const receivers = this._config.receivers.concat(
+      this._config.miniserver ? this._miniserverIp || [] : [],
+    );
+
+    console.log('[UDP4] Pushing ' + message);
+
+    receivers.forEach((receiver) => {
       const client = dgram.createSocket('udp4');
 
-      console.log('[UDP4] Pushing ' + message);
-
-      client.send(message, this._config.port, miniserverIp, () => {
+      client.send(message, this._config.port, receiver, () => {
         client.close();
       });
-    }
+    });
   }
 
   pushAudioEvent(id) {

@@ -49,9 +49,15 @@ try {
 }
 
 for (let id = 1; id <= +config.data['music-servers']; id++) {
+  const key = (name) => {
+    return config.data['music-server-' + id + '-' + name];
+  };
+
   const server = new MusicServer({
-    zones: +config.data['music-server-' + id + '-zones'],
     port: 6090 + id,
+    receivers: key('receivers').split(/\s*,\s*/g),
+    miniserver: !!+key('miniserver'),
+    zones: +key('zones'),
   });
 
   server.start();
