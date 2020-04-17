@@ -114,11 +114,19 @@
       <p>
         Music Server <?= $id ?> is located in port <?= 6090 + $id ?>:
 
-        <a class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-arrow-d ui-btn-icon-left" href="data:application/octet-stream;charset=utf-8;base64,<?= base64_encode($vi) ?>">
+        <a
+          class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-arrow-d ui-btn-icon-left"
+          href="data:application/octet-stream;charset=utf-8;base64,<?= base64_encode($vi) ?>"
+          download="vi-msi-<?= 6090 + $id ?>.xml"
+        >
           Get virtual inputs
         </a>
 
-        <a class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-arrow-d ui-btn-icon-left" href="data:application/octet-stream;charset=utf-8;base64,<?= base64_encode($vo) ?>">
+        <a
+          class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-arrow-d ui-btn-icon-left"
+          href="data:application/octet-stream;charset=utf-8;base64,<?= base64_encode($vo) ?>"
+          download="vo-msi-<?= 6090 + $id ?>.xml"
+        >
           Get virtual outputs
         </a>
       </p>
