@@ -25,6 +25,7 @@ replaceInFile('package.json', packageRegExp, version);
 replaceInFile('bin/service/package.json', packageRegExp, version);
 
 // Commit the modifications.
+childProcess.spawnSync('git', ['add', '.'], opts);
 childProcess.spawnSync('git', ['commit', '-m', 'Version ' + version], opts);
 
 // Generate the zip.
