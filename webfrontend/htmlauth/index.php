@@ -168,10 +168,11 @@
   <?php for ($id = 1; $id <= $cfg['data']['music-servers']; $id++) { ?>
     <?php
       $vi = $vo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-      $port = 6090 + $id;
+      $portOut = 6090 + $id;
+      $portIn = $portOut + 1000;
 
-      $vi .= "<VirtualInUdp Title=\"Music server $id\" Comment=\"\" Address=\"\" Port=\"$port\">";
-      $vo .= "<VirtualOut Title=\"Music server $id\" Comment=\"\" Address=\"/dev/udp/&lt;LOXBERRY_IP&gt;/$port\" CmdInit=\"\" CloseAfterSend=\"false\" CmdSep=\";\">";
+      $vi .= "<VirtualInUdp Title=\"Music server $id\" Comment=\"\" Address=\"\" Port=\"$portIn\">";
+      $vo .= "<VirtualOut Title=\"Music server $id\" Comment=\"\" Address=\"/dev/udp/&lt;LOXBERRY_IP&gt;/$portOut\" CmdInit=\"\" CloseAfterSend=\"false\" CmdSep=\";\">";
 
       for ($zone = 1; $zone <= $cfg['data']["music-server-$id-zones"]; $zone++) {
         $vi .= "<VirtualInUdpCmd Title=\"Zone $zone, play\" Comment=\"\" Address=\"\" Check=\"$zone::play\" Signed=\"true\" Analog=\"false\" SourceValLow=\"0\" DestValLow=\"0\" SourceValHigh=\"1\" DestValHigh=\"1\" DefVal=\"0\" MinVal=\"-10000\" MaxVal=\"10000\" />";
@@ -203,7 +204,7 @@
         </b>
 
         <a
-          href="http://<?= LBSystem::get_localip() ?>:<?= 6090 + $id ?>/audio/cfg/all"
+          href="http://<?= LBSystem::get_localip() ?>:<?= $portOut ?>/audio/cfg/all"
           class="ui-btn ui-btn-inline ui-mini"
           target="_blank"
         >
@@ -216,14 +217,16 @@
       <div class="lb_flex-container">
         <div class="lb_flex-item-label">
           <label class="control-label">
-            <?= $L['SETTINGS.LABEL_PORT'] ?>
+            <?= $L['SETTINGS.LABEL_PORTS'] ?>
           </label>
         </div>
 
         <div class="lb_flex-item-spacer"></div>
 
         <div class="lb_flex-item">
-          <b><?= 6090 + $id ?></b>
+          <b>
+            <?= $L['SETTINGS.LABEL_OUTPUTPORT'] ?>: <?= $portOut ?>,
+            <?= $L['SETTINGS.LABEL_INPUTPORT'] ?>: <?= $portIn ?>
         </div>
 
         <div class="lb_flex-item-spacer"></div>

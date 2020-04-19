@@ -49,13 +49,27 @@ try {
 }
 
 for (let id = 1; id <= +config.data['music-servers']; id++) {
+  const port = 6090 + id;
+
   const key = (name) => {
     return config.data['music-server-' + id + '-' + name];
   };
 
+  const receivers = key('receivers')
+    .trim()
+    .split(/\s*,\s*/g)
+    .map((receiver) => {
+      const [gotIp, gotPort] = receiver.split(':');
+
+      return {
+        ip: gotIp,
+        port: gotPort || port + 1000,
+      };
+    });
+
   const server = new MusicServer({
-    port: 6090 + id,
-    receivers: key('receivers').split(/\s*,\s*/g),
+    port,
+    receivers,
     miniserver: !!+key('miniserver'),
     zones: +key('zones'),
   });

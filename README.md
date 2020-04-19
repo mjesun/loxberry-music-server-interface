@@ -52,10 +52,17 @@ noting are:
 
 ## Communication
 
-Music Servers expect to get and receive data via UDP, through the same address
-specified for TCP and Loxone Miniserver communication (i.e. in the case of the
-first Music Server, that will be `6091`). This data is key to get actions
-executed in the interface and to push data back to it.
+Music Servers expect to get and receive data via UDP. The addresses are set up
+as follow:
+
+- Internal communication to the Music Server (Loxone protocol): uses HTTP (TCP
+  protocol) to the port indicated (e.g. TCP/6091).
+
+- External communication to the Music Server (e.g. `setTitle`, `setAlbum`,
+  etc.): uses UDP protocol to the port indicated (e.g. UDP/6091).
+
+- External communication from the Music Server (e.g. `play`, `pause`, etc.):
+  uses UDP protocol to the port indicated + 1000 (e.g. UDP/7091).
 
 ### Data sent to Loxone Miniserver
 

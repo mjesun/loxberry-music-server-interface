@@ -95,7 +95,9 @@ module.exports = class MusicServer {
     const message = [].concat(id, command, args).join('::');
 
     const receivers = this._config.receivers.concat(
-      this._config.miniserver ? this._miniserverIp || [] : [],
+      this._config.miniserver
+        ? [{ip: this._miniserverIp, port: this._config.port + 1000}] || []
+        : [],
     );
 
     console.log('[UDP4] Pushing ' + message);
