@@ -198,7 +198,7 @@
       <p>
         <b>
           <font size="+2">
-            <?= $L['SETTINGS.HINT_MUSICSERVERPORT_1'] ?> <?= $id ?>
+            <?= $L['SETTINGS.LABEL_MUSICSERVERTITLE'] ?> <?= $id ?>
           </font>
         </b>
 
@@ -230,6 +230,28 @@
 
         <div class="lb_flex-item-help hint">
           <?= $L['SETTINGS.HINT_PORT'] ?>
+        </div>
+
+        <div class="lb_flex-item-spacer"></div>
+      </div>
+
+      <div class="lb_flex-container">
+        <div class="lb_flex-item-label">
+          <label class="control-label">
+            <?= $L['SETTINGS.LABEL_ADDRESS'] ?>
+          </label>
+        </div>
+
+        <div class="lb_flex-item-spacer"></div>
+
+        <div class="lb_flex-item">
+          <b><pre>http://<?= LBSystem::get_localip() ?>:<?= 6090 + $id ?></pre></b>
+        </div>
+
+        <div class="lb_flex-item-spacer"></div>
+
+        <div class="lb_flex-item-help hint">
+          <?= $L['SETTINGS.HINT_ADDRESS'] ?>
         </div>
 
         <div class="lb_flex-item-spacer"></div>
@@ -300,7 +322,7 @@
       <div class="lb_flex-container">
         <div class="lb_flex-item-label">
           <label class="control-label">
-            <?= $L['SETTINGS.LABEL_IPTOSENDSMESSAGES'] ?>
+            <?= $L['SETTINGS.LABEL_IPTOSENDMESSAGES'] ?>
           </label>
         </div>
 
@@ -317,7 +339,7 @@
         <div class="lb_flex-item-spacer"></div>
 
         <div class="lb_flex-item-help hint">
-          <?= $L['SETTINGS.HINT_IPTOSENDSMESSAGES'] ?>
+          <?= $L['SETTINGS.HINT_IPTOSENDMESSAGES'] ?>
         </div>
 
         <div class="lb_flex-item-spacer"></div>
