@@ -22,7 +22,9 @@ childProcess.spawnSync('git', ['clean', '-xdf'], opts);
 // Modify files with the version.
 replaceInFile('plugin.cfg', pluginRegExp, version);
 replaceInFile('package.json', packageRegExp, version);
+replaceInFile('package-lock.json', packageRegExp, version);
 replaceInFile('bin/service/package.json', packageRegExp, version);
+replaceInFile('bin/service/package-lock.json', packageRegExp, version);
 
 // Commit the modifications.
 childProcess.spawnSync('git', ['add', '.'], opts);
